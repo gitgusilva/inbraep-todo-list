@@ -10,16 +10,14 @@
 </head>
 <body>
 <div id="app">
-    <example-component></example-component>
     <todo-list></todo-list>
 </div>
 <script src="{{asset('js/app.js')}}"></script>
 </body>
 </html>
 <script>
-    import ExampleComponent from "../js/components/ExampleComponent";
     import TodoList from "../js/components/TodoList";
     export default {
-        components: {TodoList, ExampleComponent}
+        components: {TodoList}
     }
 </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Todo;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -18,7 +19,7 @@ class TodoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Todo
+     * @return Collection|Todo[]
      */
     public function index()
     {
