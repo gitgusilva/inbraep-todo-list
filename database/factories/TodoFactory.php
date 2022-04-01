@@ -15,7 +15,7 @@ class TodoFactory extends Factory
     {
         return [
             "name" => $this->faker->words(2, true),
-            "time" => $this->faker->dateTime,
+            "completed" => $this->faker->boolean,
         ];
     }
 }
