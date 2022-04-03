@@ -5,16 +5,14 @@
  */
 
 require('./bootstrap');
-
 window.Vue = require('vue').default;
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {faTrashCan, faPencil, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faTrashCan, faPencil, faPlus, faQuestion} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faTrashCan, faPencil, faPlus);
+library.add(faTrashCan, faPencil, faPlus, faQuestion);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-
 
 /**
  * The following block of code may be used to automatically register your

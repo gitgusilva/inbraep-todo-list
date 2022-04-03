@@ -1,25 +1,17 @@
 <template>
   <div class="addItem">
-    <input type="text" v-model="name" />
-    <button class="add" @click="addTodo()"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+    <input type="text" :value="item" @change="changeValue" />
+    <button class="add" @click="$emit('createTodo', item)"><font-awesome-icon icon="fa-solid fa-plus" /></button>
   </div>
 </template>
 
 <script>
 export default {
   name: "TodoForm",
-  data: () => {
-    return {
-      name: ""
-    }
-  },
+  props: ['item'],
   methods: {
-    addTodo: function () {
-      axios.post('api/todo', {
-        name: this.name
-      }).then(res => {
-        console.log(res.data);
-      }).catch(err => console.log(err));
+    changeValue: function (event) {
+      this.item = event.target.value;
     }
   }
 }

@@ -1,23 +1,39 @@
 <template>
-  <div class="item" :identifier="item.id">
-    <div class="info"><span class="description">{{item.name}}</span></div>
+  <div class="item">
+    <div class="info">
+      <input type="checkbox" :checked="item.completed" disabled>
+      <span class="description">{{ item.name }}</span>
+    </div>
     <div class="options">
-      <button class="edit" v-on:click="$emit('edit')"><font-awesome-icon icon="fa-solid fa-pencil" /></button>
-      <button class="remove" v-on:click="$emit('remove')"><font-awesome-icon icon="fa-solid fa-trash-can" /></button>
+      <button class="edit" @click="$emit('editTodo', item.id)">
+        <font-awesome-icon icon="fa-solid fa-pencil"/>
+      </button>
+      <button class="remove" @click="$emit('deleteTodo', item.id)">
+        <font-awesome-icon icon="fa-solid fa-trash-can"/>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-    name: "TodoItem",
-    props: ['item']
+  name: "TodoItem",
+  props: ['item'],
+  data: () => {
+    return {
+      editing: false
+    }
+  },
+  methods: {
+    editTodo: function () {
+
+    },
+  }
 }
 </script>
 
 <style scoped>
 /* Item card & description */
-
 .item, .item > .options {
   display: flex;
   flex-direction: row;
