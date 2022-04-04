@@ -9,8 +9,8 @@ Desenvolvido em virtude do desafio proposto pela inbraep.
 A instalação é bem simples, basta fazer um clone do projeto e realizar a instalação das dependências npm e do composer, e após isto será necessário seguir estas etapas:
 
 ```bash
-  Copie o arquivo .env.example do projeto e renomeei o mesmo apenas para .env e após isto, 
-  configure as variáveis do arquivo .env e utilize este comando:
+  Copie o arquivo .env.example do projeto e renomeei o mesmo apenas para .env, 
+  configure as variáveis dentrodo mesmo conforme é indicado abaixo e após isto utilize o comando em sequência:
 
   DB_CONNECTION=mysql
   DB_HOST=127.0.0.1
