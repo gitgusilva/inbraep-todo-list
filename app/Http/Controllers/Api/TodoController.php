@@ -101,7 +101,7 @@ class TodoController extends Controller
             $todo->update($request->all());
 
             return response()->json([
-                "message" => "Sucesso ao editar o item solicitado.",
+                "message" => "Sucesso ao editar o item informado.",
                 "data" => $todo
             ]);
         } catch (\Exception $e) {

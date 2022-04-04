@@ -9,10 +9,25 @@ window.Vue = require('vue').default;
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {faTrashCan, faPencil, faPlus, faQuestion} from '@fortawesome/free-solid-svg-icons';
+import {faTrashCan, faPencil, faPlus, faQuestion, faXmark} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faTrashCan, faPencil, faPlus, faQuestion);
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+
+
+library.add(faTrashCan, faPencil, faPlus, faQuestion, faXmark);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.use(Toast, {
+    transition: "Vue-Toastification__bounce",
+    maxToasts: 20,
+    newestOnTop: true,
+    position: "top-right",
+    timeout: 5000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    hideProgressBar: false,
+});
 
 /**
  * The following block of code may be used to automatically register your

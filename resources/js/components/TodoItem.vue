@@ -1,16 +1,17 @@
 <template>
-  <div class="item">
+  <div class="item" v-bind:class="[item.completed ? 'completed' : '']">
     <div class="info">
-      <input type="checkbox" :checked="item.completed" disabled>
+      <input type="checkbox" :checked="item.completed" disabled />
+
       <div class="description">
         {{ item.name }}
       </div>
     </div>
     <div class="options">
-      <button class="edit" @click="$emit('editTodo', item.id)">
+      <button class="edit" @click="$emit('edit', item)">
         <font-awesome-icon icon="fa-solid fa-pencil"/>
       </button>
-      <button class="remove" @click="$emit('deleteTodo', item.id)">
+      <button class="remove" @click="$emit('delete', item.id)">
         <font-awesome-icon icon="fa-solid fa-trash-can"/>
       </button>
     </div>
@@ -21,35 +22,35 @@
 export default {
   name: "TodoItem",
   props: ['item'],
-  data: () => {
-    return {
-      editing: false
-    }
-  },
-  methods: {
-    editTodo: function () {
-
-    },
-  }
 }
 </script>
 
 <style scoped>
 /* Item card & description */
-.item, .item > .options {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
 .item {
+  position: relative;
   padding: 10px;
   border: 1px solid #c5c2c2;
   border-radius: 0.300rem;
 }
 
+.item, .item > .options {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
 .item:not(:first-child) {
   margin-top: 10px;
+}
+
+.item.completed {
+  color: #707070;
+  background-color: #d0d0d0;
+}
+
+.item.completed > .info > .description {
+  text-decoration: line-through;
 }
 
 .item > .info, .item > .info > .description {

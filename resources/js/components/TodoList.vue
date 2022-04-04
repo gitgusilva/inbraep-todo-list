@@ -2,24 +2,29 @@
   <div class="todo-list">
     <header>
       <h1 class="title">Inbraep To-Do List</h1>
-      <TodoForm v-on:createTodo="addTodo" :item="name"/>
+      <form @submit.prevent="createTodo">
+        <input type="text" v-model="creatingTodo.name"/>
+        <button type="submit" :disabled="!creatingTodo.name.length || todos.isLoading">
+          <font-awesome-icon icon="fa-solid fa-plus"/>
+        </button>
+      </form>
     </header>
     <div class="divider"/>
     <main>
       <div class="list">
-        <TodoItem v-for="(todo, index) in todos" :key="index" :item="todo" v-on:deleteTodo="deleteTodo" v-on:editTodo="editTodo"/>
-        <div v-if="!todos.length" class="empty">
+        <div v-if="todos.isLoading" class="loading">
+          <div class="loader"/>
+          <span>Carregando...</span>
+        </div>
+        <TodoItem v-if="!todos.isLoading && todos.data.length" v-for="(todo, index) in todos.data" :key="index"
+                  :item="todo" v-on:delete="deleteTodo" v-on:edit="showEditModal"/>
+        <div v-if="!todos.data.length && !todos.isLoading" class="empty">
           <font-awesome-icon icon="fa-solid fa-question" class="icon"/>
-          <p class="description">Não existe nenhum dado guardado, tente criar um novo.</p>
+          <span class="description">Nada foi encontrado!</span>
         </div>
       </div>
-      <sliding-pagination
-          :current="pagination.currentPage"
-          :total="pagination.lastPage"
-          @page-change="getList"
-          v-if="todos.length"
-          class="pagination"
-      ></sliding-pagination>
+      <sliding-pagination v-if="todos.data.length" class="pagination" :current="pagination.currentPage"
+                          :total="pagination.lastPage" @page-change="refreshList"/>
     </main>
     <footer>
       <div class="copyright">
@@ -27,80 +32,128 @@
       </div>
     </footer>
 
-    <TodoModal :opened="modal.opened" info:="modal.data" v-on:saveTodo="saveTodo" v-on:closeModal="cancelEdit"/>
+    <div class="modal" v-if="modal.isOpened">
+      <form @submit.prevent="updateTodo">
+        <header>
+          <button type="button" @click="modal.isOpened = false">
+            <font-awesome-icon icon="fa-solid fa-xmark"/>
+          </button>
+        </header>
+        <main>
+          <div class="form-group">
+            <label for="name">Nome da tarefa:</label>
+            <input id="name" type="text" v-model="editingTodo.name"/>
+          </div>
+          <div class="form-group align-row">
+            <input id="completed" type="checkbox" v-model="editingTodo.completed"/>
+            <label for="completed">Tarefa Completa?</label>
+          </div>
+        </main>
+        <footer>
+          <button type="submit">Salvar</button>
+        </footer>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import TodoItem from "./TodoItem";
-import TodoForm from "./TodoForm";
-import TodoModal from "./TodoModal";
 import SlidingPagination from 'vue-sliding-pagination'
 
 export default {
   name: "todo-list",
-  components: {TodoModal, TodoForm, TodoItem, SlidingPagination},
+  components: {TodoItem, SlidingPagination},
   data: () => {
     return {
-      todos: [],
-      name: "",
-      modal: {
-        opened: false,
-        data: null
+      todos: {
+        isLoading: false,
+        data: []
+      },
+      creatingTodo: {
+        name: "",
+      },
+      editingTodo: {
+        id: undefined,
+        name: undefined,
+        completed: undefined,
       },
       pagination: {
         firstPage: 1,
-        currentPage: Number,
-        lastPage: Number,
+        currentPage: undefined,
+        lastPage: undefined,
+      },
+      modal: {
+        isOpened: false
       }
     }
   },
   methods: {
-    getList: function (page = this.pagination.firstPage) {
-      axios.get("api/todo?page=" + page).then(res => {
-        this.todos = res.data.data.data;
-        this.pagination.currentPage = res.data.data.current_page;
-        this.pagination.lastPage = res.data.data.last_page;
-      }).catch(err => console.log(err));
+    refreshList: function (page = this.pagination.firstPage) {
+      this.todos.isLoading = true;
+      axios.get(`api/todos?page=${page}`).then((response) => {
+        this.todos.data = response.data.data.data;
+        this.pagination.currentPage = response.data.data.current_page;
+        this.pagination.lastPage = response.data.data.last_page;
+      }).catch(() => {
+        return this.$toast.error("Ops, Ocorreu um erro inesperado ao consultar os itens existentes.");
+      }).finally(() => {
+        this.todos.isLoading = false;
+      });
     },
-    addTodo: function (name) {
-      axios.post('api/todo', {
-        name: name
-      }).then(res => {
-        if (res.status === 201) {
-          this.getList();
-        }
-      }).catch(err => console.log(err));
-
-      this.name = "";
+    createTodo: function () {
+      if (this.creatingTodo.name.length) {
+        axios.post('api/todos', {
+          name: this.creatingTodo.name
+        }).then(res => {
+          if (res.status === 201) {
+            this.refreshList();
+            return this.$toast.success(res.data.message);
+          }
+        }).catch(() => {
+          return this.$toast.error("Ops, Ocorreu um erro inesperado ao criar o novo item.");
+        });
+        this.creatingTodo.name = "";
+      }
     },
     deleteTodo: function (item) {
-      axios.delete('api/todo/' + item).then(res => {
+      axios.delete(`api/todos/${item}`).then(res => {
         if (res.status === 200) {
-          this.getList();
+          this.refreshList();
+          return this.$toast.success(res.data.message);
         }
-      }).catch(err => console.log(err));
+      }).catch(err => console.log(err))
     },
-    saveTodo: function (item) {
-      axios.patch('api/todo/' + item.id, {
-        name: item.name,
-        completed: item.completed
-      }).then(res => {
-        if (res.status === 200) {
-          this.getList();
-        }
-      }).catch(err => console.log(err));
+    updateTodo: function () {
+      this.todos.isLoading = true;
+      this.modal.isOpened = false;
+      axios.put(`api/todos/${this.editingTodo.id}`, this.editingTodo)
+          .then((response) => {
+            this.editingTodo.id = undefined;
+            this.editingTodo.name = undefined;
+            this.editingTodo.completed = undefined;
+
+            if (response.status === 200) {
+              this.refreshList();
+              return this.$toast.success(response.data.message);
+            }
+          })
+          .catch(() => {
+            return this.$toast.error("Ops, Ocorreu um erro inesperado ao salvar as alterações do item.");
+          })
+          .finally(() => {
+            this.todos.isLoading = false;
+          })
     },
-    editTodo: function (item) {
-      this.modal.opened = true;
-      this.modal.data = this.todos.find(e => e.id === item);
-    },
-    cancelEdit: function (cancel) {
-      return this.modal.opened = cancel;
+    showEditModal: function (item) {
+      this.editingTodo.id = item.id;
+      this.editingTodo.name = item.name;
+      this.editingTodo.completed = item.completed;
+      this.modal.isOpened = true;
     },
   },
   async created() {
-    await this.getList();
+    await this.refreshList();
   },
 }
 </script>
@@ -111,6 +164,7 @@ export default {
   display: flex;
   flex-direction: column;
   max-width: 400px;
+  width: 400px;
   background-color: #FFFFFF;
   border-radius: 0.300rem;
   overflow: hidden;
@@ -123,12 +177,31 @@ export default {
 }
 
 .todo-list > header > h1 {
-  margin: 15px auto;
+  margin: 15px 0;
   color: #1a1e21;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  text-align: center;
-  text-transform: uppercase;
+}
+
+.todo-list > header > form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+}
+
+.todo-list > header > form > input {
+  display: block;
+  width: 100%;
+  padding: 0 10px;
+  flex: 1 auto;
+  border: 1px solid #c5c2c2;
+  border-radius: 0.300rem;
+}
+
+.todo-list > header > form > button {
+  margin-left: 10px;
 }
 
 .todo-list > .divider {
@@ -149,7 +222,12 @@ export default {
 }
 
 .todo-list > main > .list > .empty {
-  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   text-align: center;
 }
 
@@ -157,8 +235,9 @@ export default {
   font-size: 35px;
 }
 
-.todo-list > main > .list > .empty > .description {
+.todo-list > main > .list > .empty > span.description {
   font-size: 15px;
+  margin-top: 15px;
 }
 
 .todo-list > footer > .copyright {
@@ -172,6 +251,79 @@ export default {
   font-weight: 500;
 }
 
+.todo-list > .modal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: saturate(180%) blur(5px);
+  backdrop-filter: saturate(180%) blur(5px);
+}
+
+.todo-list > .modal > form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  padding: 15px;
+  background-color: #FFFFFF;
+  -webkit-box-shadow: 0px 3px 11px -5px #242424;
+  box-shadow: 0px 3px 11px -5px #242424;
+  border-radius: 0.300rem;
+}
+
+.todo-list > .modal > form > header, .todo-list > .modal > form > footer {
+  display: flex;
+  justify-content: end;
+}
+
+.todo-list > .modal > form > main > .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-list > .modal > form > main > .form-group:not(:first-child) {
+  margin-top: 15px;
+}
+
+.todo-list > .modal > form > main > .form-group.align-row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.todo-list > .modal > form > main > .form-group input {
+  width: 100%;
+  height: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: 1px solid #c5c2c2;
+  border-radius: 0.300rem;
+}
+
+.todo-list > .modal > form > main > .form-group input[type=checkbox] {
+  width: 25px;
+  height: 25px;
+  padding: unset;
+}
+
+.todo-list > .modal > form > main > .form-group label {
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.todo-list > .modal > form > main > .form-group.align-row label {
+  margin-left: 5px;
+  margin-bottom: unset;
+}
+
+
+.todo-list > .modal > form > footer {
+  margin-top: 15px;
+}
+
 @media (max-width: 769px) {
   .todo-list {
     display: flex;
@@ -183,69 +335,4 @@ export default {
     overflow: auto;
   }
 }
-</style>
-
-<style>
-button {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 0.300rem;
-  background-color: #0d6efd;
-}
-
-button:disabled {
-  color: #707070;
-  background-color: #d0d0d0;
-}
-
-button:not(:disabled):hover {
-  cursor: pointer;
-  box-shadow: inset 0 0 5px #333333;
-}
-
-.todo-list > main .pagination {
-  margin-top: 20px;
-}
-
-.todo-list > main .pagination ul {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.todo-list > main .pagination ul > li {
-  list-style-type: none;
-}
-
-.todo-list > main .pagination ul > li:not(:first-child) {
-  margin-left: 5px;
-}
-
-.todo-list > main .pagination ul > li a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  color: #FFFFFF;
-  text-decoration: none;
-  background-color: #247DFFFF;
-  border-radius: 0.300rem;
-}
-
-.todo-list > main .pagination > ul > li a.c-sliding-pagination__page--current, .todo-list > main .pagination > ul > li a:hover {
-  background-color: #254674;
-}
-
-.todo-list > main .pagination > ul > li.c-sliding-pagination__list-element--disabled a {
-  cursor: not-allowed;
-  color: #333333;
-  background-color: #c9c9c9;
-}
-
 </style>
