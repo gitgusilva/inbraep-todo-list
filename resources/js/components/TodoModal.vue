@@ -1,12 +1,12 @@
 <template>
   <div class="modal" v-bind:class="[(opened) ? 'active' : '']">
-    <form @submit.prevent="sendData">
+    <form @submit.prevent="$emit('saveTodo', form)">
       <header>
-        <button @click="$emit('cancelEdit', false)">X</button>
+        <button @click="$emit('closeModal', false)">X</button>
       </header>
       <main>
-        <input type="checkbox" :checked="completed" />
-        <input type="text" :value="name" @change="changeValue" />
+        <input type="checkbox" :checked="info['completed']" @change="(e) => form.completed = e.target.value" />
+        <input type="text" :value="info['name']" @change="(e) => form.name = e.target.value" />
       </main>
       <footer>
         <button type="submit">Save</button>
@@ -18,15 +18,16 @@
 <script>
 export default {
   name: "TodoModal",
-  props: ['opened', 'name', 'completed'],
-  methods: {
-    changeValue: function (event) {
-      this.name = event.target.value;
-    },
-    sendData: function () {
-
+  props: ['opened', 'info'],
+  data: () => {
+    return {
+      form: {
+        id: this.info['id'],
+        name: this.info['name'],
+        completed: this.info['completed']
+      }
     }
-  }
+  },
 }
 </script>
 

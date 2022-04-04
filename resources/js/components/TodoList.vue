@@ -27,7 +27,7 @@
       </div>
     </footer>
 
-    <TodoModal :opened="modal.opened" v-on:cancelEdit="cancelEdit"/>
+    <TodoModal :opened="modal.opened" info:="modal.data" v-on:saveTodo="saveTodo" v-on:closeModal="cancelEdit"/>
   </div>
 </template>
 
@@ -46,11 +46,7 @@ export default {
       name: "",
       modal: {
         opened: false,
-        data: {
-          id: Number,
-          completed: Boolean,
-          name: String,
-        }
+        data: null
       },
       pagination: {
         firstPage: 1,
@@ -62,15 +58,14 @@ export default {
   methods: {
     getList: function (page = this.pagination.firstPage) {
       axios.get("api/todo?page=" + page).then(res => {
-        this.todos = res.data.data;
-        this.pagination.currentPage = res.data.current_page;
-        this.pagination.lastPage = res.data.last_page;
+        this.todos = res.data.data.data;
+        this.pagination.currentPage = res.data.data.current_page;
+        this.pagination.lastPage = res.data.data.last_page;
       }).catch(err => console.log(err));
     },
     addTodo: function (name) {
       axios.post('api/todo', {
-        name: name,
-        completed: 0
+        name: name
       }).then(res => {
         if (res.status === 201) {
           this.getList();
@@ -86,10 +81,19 @@ export default {
         }
       }).catch(err => console.log(err));
     },
+    saveTodo: function (item) {
+      axios.patch('api/todo/' + item.id, {
+        name: item.name,
+        completed: item.completed
+      }).then(res => {
+        if (res.status === 200) {
+          this.getList();
+        }
+      }).catch(err => console.log(err));
+    },
     editTodo: function (item) {
       this.modal.opened = true;
-      let info = this.todos.find(e => e.id === item);
-      console.log(info);
+      this.modal.data = this.todos.find(e => e.id === item);
     },
     cancelEdit: function (cancel) {
       return this.modal.opened = cancel;
@@ -234,7 +238,7 @@ button:not(:disabled):hover {
   border-radius: 0.300rem;
 }
 
-.todo-list > main .pagination > ul > li a.c-sliding-pagination__page--current {
+.todo-list > main .pagination > ul > li a.c-sliding-pagination__page--current, .todo-list > main .pagination > ul > li a:hover {
   background-color: #254674;
 }
 

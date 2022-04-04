@@ -20441,11 +20441,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       name: "",
       modal: {
         opened: false,
-        data: {
-          id: Number,
-          completed: Boolean,
-          name: String
-        }
+        data: null
       },
       pagination: {
         firstPage: 1,
@@ -20460,9 +20456,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.pagination.firstPage;
       axios.get("api/todo?page=" + page).then(function (res) {
-        _this.todos = res.data.data;
-        _this.pagination.currentPage = res.data.current_page;
-        _this.pagination.lastPage = res.data.last_page;
+        _this.todos = res.data.data.data;
+        _this.pagination.currentPage = res.data.data.current_page;
+        _this.pagination.lastPage = res.data.data.last_page;
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -20471,8 +20467,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       axios.post('api/todo', {
-        name: name,
-        completed: 0
+        name: name
       }).then(function (res) {
         if (res.status === 201) {
           _this2.getList();
@@ -20493,19 +20488,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return console.log(err);
       });
     },
+    saveTodo: function saveTodo(item) {
+      var _this4 = this;
+
+      axios.patch('api/todo/' + item.id, {
+        name: item.name,
+        completed: item.completed
+      }).then(function (res) {
+        if (res.status === 200) {
+          _this4.getList();
+        }
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    },
     editTodo: function editTodo(item) {
       this.modal.opened = true;
-      var info = this.todos.find(function (e) {
+      this.modal.data = this.todos.find(function (e) {
         return e.id === item;
       });
-      console.log(info);
     },
     cancelEdit: function cancelEdit(cancel) {
       return this.modal.opened = cancel;
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this5 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -20513,7 +20521,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return _this4.getList();
+              return _this5.getList();
 
             case 2:
             case "end":
@@ -20538,6 +20546,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+var _this = undefined;
+
 //
 //
 //
@@ -20557,12 +20567,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TodoModal",
-  props: ['opened', 'name', 'completed'],
-  methods: {
-    changeValue: function changeValue(event) {
-      this.name = event.target.value;
-    },
-    sendData: function sendData() {}
+  props: ['opened', 'info'],
+  data: function data() {
+    return {
+      form: {
+        id: _this.info['id'],
+        name: _this.info['name'],
+        completed: _this.info['completed']
+      }
+    };
   }
 });
 
@@ -25793,7 +25806,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nbutton {\r\n  display: flex;\r\n  align-items: center;\r\n  padding: 10px;\r\n  color: #FFFFFF;\r\n  border: none;\r\n  border-radius: 0.300rem;\r\n  background-color: #0d6efd;\n}\nbutton:disabled {\r\n  color: #707070;\r\n  background-color: #d0d0d0;\n}\nbutton:not(:disabled):hover {\r\n  cursor: pointer;\r\n  box-shadow: inset 0 0 5px #333333;\n}\n.todo-list > main .pagination {\r\n  margin-top: 20px;\n}\n.todo-list > main .pagination ul {\r\n  display: flex;\r\n  flex-direction: row;\r\n  width: 100%;\r\n  margin: 0;\r\n  padding: 0;\n}\n.todo-list > main .pagination ul > li {\r\n  list-style-type: none;\n}\n.todo-list > main .pagination ul > li:not(:first-child) {\r\n  margin-left: 5px;\n}\n.todo-list > main .pagination ul > li a {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  width: 30px;\r\n  height: 30px;\r\n  color: #FFFFFF;\r\n  text-decoration: none;\r\n  background-color: #247DFFFF;\r\n  border-radius: 0.300rem;\n}\n.todo-list > main .pagination > ul > li a.c-sliding-pagination__page--current {\r\n  background-color: #254674;\n}\n.todo-list > main .pagination > ul > li.c-sliding-pagination__list-element--disabled a {\r\n  cursor: not-allowed;\r\n  color: #333333;\r\n  background-color: #c9c9c9;\n}\r\n\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nbutton {\r\n  display: flex;\r\n  align-items: center;\r\n  padding: 10px;\r\n  color: #FFFFFF;\r\n  border: none;\r\n  border-radius: 0.300rem;\r\n  background-color: #0d6efd;\n}\nbutton:disabled {\r\n  color: #707070;\r\n  background-color: #d0d0d0;\n}\nbutton:not(:disabled):hover {\r\n  cursor: pointer;\r\n  box-shadow: inset 0 0 5px #333333;\n}\n.todo-list > main .pagination {\r\n  margin-top: 20px;\n}\n.todo-list > main .pagination ul {\r\n  display: flex;\r\n  flex-direction: row;\r\n  width: 100%;\r\n  margin: 0;\r\n  padding: 0;\n}\n.todo-list > main .pagination ul > li {\r\n  list-style-type: none;\n}\n.todo-list > main .pagination ul > li:not(:first-child) {\r\n  margin-left: 5px;\n}\n.todo-list > main .pagination ul > li a {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  width: 30px;\r\n  height: 30px;\r\n  color: #FFFFFF;\r\n  text-decoration: none;\r\n  background-color: #247DFFFF;\r\n  border-radius: 0.300rem;\n}\n.todo-list > main .pagination > ul > li a.c-sliding-pagination__page--current, .todo-list > main .pagination > ul > li a:hover {\r\n  background-color: #254674;\n}\n.todo-list > main .pagination > ul > li.c-sliding-pagination__list-element--disabled a {\r\n  cursor: not-allowed;\r\n  color: #333333;\r\n  background-color: #c9c9c9;\n}\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -45238,8 +45251,8 @@ var render = function () {
       _vm._m(0),
       _vm._v(" "),
       _c("TodoModal", {
-        attrs: { opened: _vm.modal.opened },
-        on: { cancelEdit: _vm.cancelEdit },
+        attrs: { opened: _vm.modal.opened, "info:": "modal.data" },
+        on: { saveTodo: _vm.saveTodo, closeModal: _vm.cancelEdit },
       }),
     ],
     1
@@ -45289,7 +45302,7 @@ var render = function () {
           on: {
             submit: function ($event) {
               $event.preventDefault()
-              return _vm.sendData.apply(null, arguments)
+              return _vm.$emit("saveTodo", _vm.form)
             },
           },
         },
@@ -45300,7 +45313,7 @@ var render = function () {
               {
                 on: {
                   click: function ($event) {
-                    return _vm.$emit("cancelEdit", false)
+                    return _vm.$emit("closeModal", false)
                   },
                 },
               },
@@ -45311,13 +45324,22 @@ var render = function () {
           _c("main", [
             _c("input", {
               attrs: { type: "checkbox" },
-              domProps: { checked: _vm.completed },
+              domProps: { checked: _vm.info["completed"] },
+              on: {
+                change: function (e) {
+                  return (_vm.form.completed = e.target.value)
+                },
+              },
             }),
             _vm._v(" "),
             _c("input", {
               attrs: { type: "text" },
-              domProps: { value: _vm.name },
-              on: { change: _vm.changeValue },
+              domProps: { value: _vm.info["name"] },
+              on: {
+                change: function (e) {
+                  return (_vm.form.name = e.target.value)
+                },
+              },
             }),
           ]),
           _vm._v(" "),
