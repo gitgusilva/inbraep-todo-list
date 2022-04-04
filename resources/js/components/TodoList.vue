@@ -13,19 +13,13 @@
           <p class="description">Não existe nenhum dado guardado, tente criar um novo.</p>
         </div>
       </div>
-      <div v-if="todos.length" class="pagination">
-        <button type="button" :disabled="pagination.currentPage === pagination.firstPage"
-                @click="getList(pagination.currentPage-1)">Previous
-        </button>
-        <button type="button" class="page-link" v-for="pageNumber in pagination.lastPages"
-                v-bind:class="[(pageNumber === pagination.currentPage) ? 'active' : '']" @click="getList(pageNumber)">
-          {{ pageNumber }}
-        </button>
-        <button type="button"
-                :disabled="pagination.currentPage > pagination.lastPage"
-                @click="getList(pagination.currentPage+1)">Next
-        </button>
-      </div>
+      <sliding-pagination
+          :current="pagination.currentPage"
+          :total="pagination.lastPage"
+          @page-change="getList"
+          v-if="todos.length"
+          class="pagination"
+      ></sliding-pagination>
     </main>
     <footer>
       <div class="copyright">
@@ -41,10 +35,11 @@
 import TodoItem from "./TodoItem";
 import TodoForm from "./TodoForm";
 import TodoModal from "./TodoModal";
+import SlidingPagination from 'vue-sliding-pagination'
 
 export default {
   name: "todo-list",
-  components: {TodoModal, TodoForm, TodoItem},
+  components: {TodoModal, TodoForm, TodoItem, SlidingPagination},
   data: () => {
     return {
       todos: [],
@@ -58,7 +53,7 @@ export default {
         }
       },
       pagination: {
-        firstPage: Number,
+        firstPage: 1,
         currentPage: Number,
         lastPage: Number,
       }
@@ -69,7 +64,7 @@ export default {
       axios.get("api/todo?page=" + page).then(res => {
         this.todos = res.data.data;
         this.pagination.currentPage = res.data.current_page;
-        this.pagination.lastPages = res.data.last_page;
+        this.pagination.lastPage = res.data.last_page;
       }).catch(err => console.log(err));
     },
     addTodo: function (name) {
@@ -149,10 +144,6 @@ export default {
   overflow: auto;
 }
 
-.todo-list > main > .list::-webkit-scrollbar {
-  width: 10px;
-}
-
 .todo-list > main > .list > .empty {
   width: 80%;
   text-align: center;
@@ -164,21 +155,6 @@ export default {
 
 .todo-list > main > .list > .empty > .description {
   font-size: 15px;
-}
-
-.todo-list > main > .pagination {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin-top: 20px;
-}
-
-.todo-list > main > .pagination button:not(:first-child) {
-  margin-left: 10px;
-}
-
-.todo-list > main > .pagination button.active {
-  background-color: red;
 }
 
 .todo-list > footer > .copyright {
@@ -225,4 +201,47 @@ button:not(:disabled):hover {
   cursor: pointer;
   box-shadow: inset 0 0 5px #333333;
 }
+
+.todo-list > main .pagination {
+  margin-top: 20px;
+}
+
+.todo-list > main .pagination ul {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.todo-list > main .pagination ul > li {
+  list-style-type: none;
+}
+
+.todo-list > main .pagination ul > li:not(:first-child) {
+  margin-left: 5px;
+}
+
+.todo-list > main .pagination ul > li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #FFFFFF;
+  text-decoration: none;
+  background-color: #247DFFFF;
+  border-radius: 0.300rem;
+}
+
+.todo-list > main .pagination > ul > li a.c-sliding-pagination__page--current {
+  background-color: #254674;
+}
+
+.todo-list > main .pagination > ul > li.c-sliding-pagination__list-element--disabled a {
+  cursor: not-allowed;
+  color: #333333;
+  background-color: #c9c9c9;
+}
+
 </style>

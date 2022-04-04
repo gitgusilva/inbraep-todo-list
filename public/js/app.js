@@ -20349,6 +20349,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TodoItem",
   props: ['item'],
@@ -20380,6 +20382,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TodoItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TodoItem */ "./resources/js/components/TodoItem.vue");
 /* harmony import */ var _TodoForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TodoForm */ "./resources/js/components/TodoForm.vue");
 /* harmony import */ var _TodoModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TodoModal */ "./resources/js/components/TodoModal.vue");
+/* harmony import */ var vue_sliding_pagination__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-sliding-pagination */ "./node_modules/vue-sliding-pagination/dist/vue-sliding-pagination.umd.js");
+/* harmony import */ var vue_sliding_pagination__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_sliding_pagination__WEBPACK_IMPORTED_MODULE_4__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -20419,12 +20423,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -20433,7 +20432,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   components: {
     TodoModal: _TodoModal__WEBPACK_IMPORTED_MODULE_3__["default"],
     TodoForm: _TodoForm__WEBPACK_IMPORTED_MODULE_2__["default"],
-    TodoItem: _TodoItem__WEBPACK_IMPORTED_MODULE_1__["default"]
+    TodoItem: _TodoItem__WEBPACK_IMPORTED_MODULE_1__["default"],
+    SlidingPagination: (vue_sliding_pagination__WEBPACK_IMPORTED_MODULE_4___default())
   },
   data: function data() {
     return {
@@ -20448,7 +20448,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       },
       pagination: {
-        firstPage: Number,
+        firstPage: 1,
         currentPage: Number,
         lastPage: Number
       }
@@ -20462,7 +20462,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       axios.get("api/todo?page=" + page).then(function (res) {
         _this.todos = res.data.data;
         _this.pagination.currentPage = res.data.current_page;
-        _this.pagination.lastPages = res.data.last_page;
+        _this.pagination.lastPage = res.data.last_page;
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -25745,7 +25745,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* Item card & description */\n.item[data-v-263df564], .item > .options[data-v-263df564] {\r\n  display: flex;\r\n  flex-direction: row;\r\n  align-items: center;\n}\n.item[data-v-263df564] {\r\n  padding: 10px;\r\n  max-height: 55px;\r\n  border: 1px solid #c5c2c2;\r\n  border-radius: 0.300rem;\n}\n.item[data-v-263df564]:not(:first-child) {\r\n  margin-top: 10px;\n}\n.item > .info[data-v-263df564] {\r\n  width: 100%;\r\n  white-space: nowrap;\r\n  text-overflow: ellipsis;\r\n  overflow: hidden;\n}\n.item > .info > span[data-v-263df564] {\r\n  color: #1a1e21;\r\n  font-size: 1rem;\r\n  font-weight: 500;\n}\r\n\r\n/* Buttons */\n.item > .options > .edit[data-v-263df564] {\r\n  background-color: #0d6efd;\n}\n.item > .options > .edit[data-v-263df564]:hover {\r\n  background-color: #489cfa;\n}\n.item > .options > .remove[data-v-263df564] {\r\n  background-color: #810e0e;\n}\n.item > .options > .remove[data-v-263df564]:hover {\r\n  background-color: #8d2b2b;\n}\n.item > .options > button[data-v-263df564]:not(:first-child) {\r\n  margin-left: 10px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* Item card & description */\n.item[data-v-263df564], .item > .options[data-v-263df564] {\r\n  display: flex;\r\n  flex-direction: row;\r\n  align-items: center;\n}\n.item[data-v-263df564] {\r\n  padding: 10px;\r\n  border: 1px solid #c5c2c2;\r\n  border-radius: 0.300rem;\n}\n.item[data-v-263df564]:not(:first-child) {\r\n  margin-top: 10px;\n}\n.item > .info[data-v-263df564], .item > .info > .description[data-v-263df564] {\r\n  display: flex;\r\n  flex-direction: row;\r\n  align-items: center;\r\n  width: 100%;\r\n  white-space: nowrap;\r\n  text-overflow: ellipsis;\r\n  overflow: hidden;\n}\n.item > .info > input[data-v-263df564] {\r\n  width: 20px;\r\n  height: 20px;\r\n  margin-right: 10px;\n}\r\n\r\n/* Buttons */\n.item > .options > .edit[data-v-263df564] {\r\n  background-color: #0d6efd;\n}\n.item > .options > .edit[data-v-263df564]:hover {\r\n  background-color: #489cfa;\n}\n.item > .options > .remove[data-v-263df564] {\r\n  background-color: #810e0e;\n}\n.item > .options > .remove[data-v-263df564]:hover {\r\n  background-color: #8d2b2b;\n}\n.item > .options > button[data-v-263df564]:not(:first-child) {\r\n  margin-left: 10px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -25769,7 +25769,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.todo-list[data-v-30436d6f] {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  max-width: 400px;\r\n  background-color: #FFFFFF;\r\n  border-radius: 0.300rem;\r\n  overflow: hidden;\n}\n.todo-list > header[data-v-30436d6f] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  padding: 15px 20px 0;\n}\n.todo-list > header > h1[data-v-30436d6f] {\r\n  margin: 15px auto;\r\n  color: #1a1e21;\r\n  font-size: 1.7rem;\r\n  font-weight: 600;\r\n  text-align: center;\r\n  text-transform: uppercase;\n}\n.todo-list > .divider[data-v-30436d6f] {\r\n  height: 1px;\r\n  margin: 20px;\r\n  background-color: #c5c2c2;\n}\n.todo-list > main[data-v-30436d6f] {\r\n  padding-left: 20px;\r\n  padding-right: 20px;\r\n  margin-bottom: 20px;\n}\n.todo-list > main > .list[data-v-30436d6f] {\r\n  height: 350px;\r\n  overflow: auto;\n}\n.todo-list > main > .list[data-v-30436d6f]::-webkit-scrollbar {\r\n  width: 10px;\n}\n.todo-list > main > .list > .empty[data-v-30436d6f] {\r\n  width: 80%;\r\n  text-align: center;\n}\n.todo-list > main > .list > .empty > .icon[data-v-30436d6f] {\r\n  font-size: 35px;\n}\n.todo-list > main > .list > .empty > .description[data-v-30436d6f] {\r\n  font-size: 15px;\n}\n.todo-list > main > .pagination[data-v-30436d6f] {\r\n  display: flex;\r\n  flex-direction: row;\r\n  width: 100%;\r\n  margin-top: 20px;\n}\n.todo-list > main > .pagination button[data-v-30436d6f]:not(:first-child) {\r\n  margin-left: 10px;\n}\n.todo-list > main > .pagination button.active[data-v-30436d6f] {\r\n  background-color: red;\n}\n.todo-list > footer > .copyright[data-v-30436d6f] {\r\n  padding: 15px 20px;\r\n  text-align: center;\r\n  background-color: #0d6efd;\n}\n.todo-list > footer > .copyright > span[data-v-30436d6f] {\r\n  color: #FFFFFF;\r\n  font-weight: 500;\n}\n@media (max-width: 769px) {\n.todo-list[data-v-30436d6f] {\r\n    display: flex;\r\n    justify-content: space-around;\r\n    width: 100%;\r\n    max-width: unset;\r\n    min-height: 100vh;\r\n    border-radius: unset;\r\n    overflow: auto;\n}\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.todo-list[data-v-30436d6f] {\r\n  position: relative;\r\n  display: flex;\r\n  flex-direction: column;\r\n  max-width: 400px;\r\n  background-color: #FFFFFF;\r\n  border-radius: 0.300rem;\r\n  overflow: hidden;\n}\n.todo-list > header[data-v-30436d6f] {\r\n  display: flex;\r\n  flex-direction: column;\r\n  padding: 15px 20px 0;\n}\n.todo-list > header > h1[data-v-30436d6f] {\r\n  margin: 15px auto;\r\n  color: #1a1e21;\r\n  font-size: 1.7rem;\r\n  font-weight: 600;\r\n  text-align: center;\r\n  text-transform: uppercase;\n}\n.todo-list > .divider[data-v-30436d6f] {\r\n  height: 1px;\r\n  margin: 20px;\r\n  background-color: #c5c2c2;\n}\n.todo-list > main[data-v-30436d6f] {\r\n  padding-left: 20px;\r\n  padding-right: 20px;\r\n  margin-bottom: 20px;\n}\n.todo-list > main > .list[data-v-30436d6f] {\r\n  height: 350px;\r\n  overflow: auto;\n}\n.todo-list > main > .list > .empty[data-v-30436d6f] {\r\n  width: 80%;\r\n  text-align: center;\n}\n.todo-list > main > .list > .empty > .icon[data-v-30436d6f] {\r\n  font-size: 35px;\n}\n.todo-list > main > .list > .empty > .description[data-v-30436d6f] {\r\n  font-size: 15px;\n}\n.todo-list > footer > .copyright[data-v-30436d6f] {\r\n  padding: 15px 20px;\r\n  text-align: center;\r\n  background-color: #0d6efd;\n}\n.todo-list > footer > .copyright > span[data-v-30436d6f] {\r\n  color: #FFFFFF;\r\n  font-weight: 500;\n}\n@media (max-width: 769px) {\n.todo-list[data-v-30436d6f] {\r\n    display: flex;\r\n    justify-content: space-around;\r\n    width: 100%;\r\n    max-width: unset;\r\n    min-height: 100vh;\r\n    border-radius: unset;\r\n    overflow: auto;\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -25793,7 +25793,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nbutton {\r\n  display: flex;\r\n  align-items: center;\r\n  padding: 10px;\r\n  color: #FFFFFF;\r\n  border: none;\r\n  border-radius: 0.300rem;\r\n  background-color: #0d6efd;\n}\nbutton:disabled {\r\n  color: #707070;\r\n  background-color: #d0d0d0;\n}\nbutton:not(:disabled):hover {\r\n  cursor: pointer;\r\n  box-shadow: inset 0 0 5px #333333;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nbutton {\r\n  display: flex;\r\n  align-items: center;\r\n  padding: 10px;\r\n  color: #FFFFFF;\r\n  border: none;\r\n  border-radius: 0.300rem;\r\n  background-color: #0d6efd;\n}\nbutton:disabled {\r\n  color: #707070;\r\n  background-color: #d0d0d0;\n}\nbutton:not(:disabled):hover {\r\n  cursor: pointer;\r\n  box-shadow: inset 0 0 5px #333333;\n}\n.todo-list > main .pagination {\r\n  margin-top: 20px;\n}\n.todo-list > main .pagination ul {\r\n  display: flex;\r\n  flex-direction: row;\r\n  width: 100%;\r\n  margin: 0;\r\n  padding: 0;\n}\n.todo-list > main .pagination ul > li {\r\n  list-style-type: none;\n}\n.todo-list > main .pagination ul > li:not(:first-child) {\r\n  margin-left: 5px;\n}\n.todo-list > main .pagination ul > li a {\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  width: 30px;\r\n  height: 30px;\r\n  color: #FFFFFF;\r\n  text-decoration: none;\r\n  background-color: #247DFFFF;\r\n  border-radius: 0.300rem;\n}\n.todo-list > main .pagination > ul > li a.c-sliding-pagination__page--current {\r\n  background-color: #254674;\n}\n.todo-list > main .pagination > ul > li.c-sliding-pagination__list-element--disabled a {\r\n  cursor: not-allowed;\r\n  color: #333333;\r\n  background-color: #c9c9c9;\n}\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -45105,8 +45105,8 @@ var render = function () {
         domProps: { checked: _vm.item.completed },
       }),
       _vm._v(" "),
-      _c("span", { staticClass: "description" }, [
-        _vm._v(_vm._s(_vm.item.name)),
+      _c("div", { staticClass: "description" }, [
+        _vm._v("\n      " + _vm._s(_vm.item.name) + "\n    "),
       ]),
     ]),
     _vm._v(" "),
@@ -45183,106 +45183,57 @@ var render = function () {
       _vm._v(" "),
       _c("div", { staticClass: "divider" }),
       _vm._v(" "),
-      _c("main", [
-        _c(
-          "div",
-          { staticClass: "list" },
-          [
-            _vm._l(_vm.todos, function (todo, index) {
-              return _c("TodoItem", {
-                key: index,
-                attrs: { item: todo },
-                on: { deleteTodo: _vm.deleteTodo, editTodo: _vm.editTodo },
-              })
-            }),
-            _vm._v(" "),
-            !_vm.todos.length
-              ? _c(
-                  "div",
-                  { staticClass: "empty" },
-                  [
-                    _c("font-awesome-icon", {
-                      staticClass: "icon",
-                      attrs: { icon: "fa-solid fa-question" },
-                    }),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "description" }, [
-                      _vm._v(
-                        "Não existe nenhum dado guardado, tente criar um novo."
-                      ),
-                    ]),
-                  ],
-                  1
-                )
-              : _vm._e(),
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _vm.todos.length
-          ? _c(
-              "div",
-              { staticClass: "pagination" },
-              [
-                _c(
-                  "button",
-                  {
-                    attrs: {
-                      type: "button",
-                      disabled:
-                        _vm.pagination.currentPage === _vm.pagination.firstPage,
-                    },
-                    on: {
-                      click: function ($event) {
-                        return _vm.getList(_vm.pagination.currentPage - 1)
-                      },
-                    },
-                  },
-                  [_vm._v("Previous\n      ")]
-                ),
-                _vm._v(" "),
-                _vm._l(_vm.pagination.lastPages, function (pageNumber) {
-                  return _c(
-                    "button",
-                    {
-                      staticClass: "page-link",
-                      class: [
-                        pageNumber === _vm.pagination.currentPage
-                          ? "active"
-                          : "",
-                      ],
-                      attrs: { type: "button" },
-                      on: {
-                        click: function ($event) {
-                          return _vm.getList(pageNumber)
-                        },
-                      },
-                    },
-                    [_vm._v("\n        " + _vm._s(pageNumber) + "\n      ")]
+      _c(
+        "main",
+        [
+          _c(
+            "div",
+            { staticClass: "list" },
+            [
+              _vm._l(_vm.todos, function (todo, index) {
+                return _c("TodoItem", {
+                  key: index,
+                  attrs: { item: todo },
+                  on: { deleteTodo: _vm.deleteTodo, editTodo: _vm.editTodo },
+                })
+              }),
+              _vm._v(" "),
+              !_vm.todos.length
+                ? _c(
+                    "div",
+                    { staticClass: "empty" },
+                    [
+                      _c("font-awesome-icon", {
+                        staticClass: "icon",
+                        attrs: { icon: "fa-solid fa-question" },
+                      }),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "description" }, [
+                        _vm._v(
+                          "Não existe nenhum dado guardado, tente criar um novo."
+                        ),
+                      ]),
+                    ],
+                    1
                   )
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    attrs: {
-                      type: "button",
-                      disabled:
-                        _vm.pagination.currentPage > _vm.pagination.lastPage,
-                    },
-                    on: {
-                      click: function ($event) {
-                        return _vm.getList(_vm.pagination.currentPage + 1)
-                      },
-                    },
-                  },
-                  [_vm._v("Next\n      ")]
-                ),
-              ],
-              2
-            )
-          : _vm._e(),
-      ]),
+                : _vm._e(),
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm.todos.length
+            ? _c("sliding-pagination", {
+                staticClass: "pagination",
+                attrs: {
+                  current: _vm.pagination.currentPage,
+                  total: _vm.pagination.lastPage,
+                },
+                on: { "page-change": _vm.getList },
+              })
+            : _vm._e(),
+        ],
+        1
+      ),
       _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
@@ -45502,6 +45453,16 @@ function normalizeComponent (
   }
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/vue-sliding-pagination/dist/vue-sliding-pagination.umd.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/vue-sliding-pagination/dist/vue-sliding-pagination.umd.js ***!
+  \********************************************************************************/
+/***/ ((module) => {
+
+!function(e,t){ true?module.exports=t():0}(window,(function(){return function(e){var t={};function i(n){if(t[n])return t[n].exports;var a=t[n]={i:n,l:!1,exports:{}};return e[n].call(a.exports,a,a.exports,i),a.l=!0,a.exports}return i.m=e,i.c=t,i.d=function(e,t,n){i.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},i.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},i.t=function(e,t){if(1&t&&(e=i(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(i.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var a in e)i.d(n,a,function(t){return e[t]}.bind(null,a));return n},i.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return i.d(t,"a",t),t},i.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},i.p="",i(i.s=1)}([function(e){e.exports=JSON.parse('{"componentClass":"c-sliding-pagination","list":"c-sliding-pagination__list","element":"c-sliding-pagination__list-element","elementDisabled":"c-sliding-pagination__list-element--disabled","elementActive":"c-sliding-pagination__list-element--active","page":"c-sliding-pagination__page"}')},function(e,t,i){"use strict";i.r(t),i.d(t,"range",(function(){return s}));var n={name:"SlidingPaginationDefaultPage",props:{ariaPageLabel:{type:String,required:!0},isCurrent:{type:Boolean,required:!0},page:{type:Number,required:!0},pageClass:{type:String,required:!0}},computed:{pageClasses:function(){var e=this.pageClass;return this.isCurrent&&(e+=" c-sliding-pagination__page--current"),e}},methods:{goToPage:function(e){e.preventDefault(),e.stopPropagation(),this.$emit("page-click",this.page)}},render:function(e){return e("a",{class:this.pageClasses,attrs:{href:"#","aria-label":this.ariaPageLabel},on:{click:this.goToPage}},this.page)}},a=i(0);function s(e,t){var i=[];if("number"!=typeof e||"number"!=typeof t)return i;if(e>t){var n=e;e=t,t=n}for(var a=e;a<=t;a++)i.push(a);return i}var r=function(e,t,i,n,a,s,r,o){var g,l="function"==typeof e?e.options:e;if(t&&(l.render=t,l.staticRenderFns=i,l._compiled=!0),n&&(l.functional=!0),s&&(l._scopeId="data-v-"+s),r?(g=function(e){(e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),a&&a.call(this,e),e&&e._registeredComponents&&e._registeredComponents.add(r)},l._ssrRegister=g):a&&(g=o?function(){a.call(this,(l.functional?this.parent:this).$root.$options.shadowRoot)}:a),g)if(l.functional){l._injectStyles=g;var u=l.render;l.render=function(e,t){return g.call(t),u(e,t)}}else{var d=l.beforeCreate;l.beforeCreate=d?[].concat(d,g):[g]}return{exports:e,options:l}}({name:"SlidingPagination",props:{ariaPaginationLabel:{type:String,required:!1,default:"Pagination Navigation"},ariaGotoPageLabel:{type:String,required:!1,default:"Go to page %page% of %total%"},ariaPreviousPageLabel:{type:String,required:!1,default:"Go to previous page"},ariaNextPageLabel:{type:String,required:!1,default:"Go to next page"},ariaCurrentPageLabel:{type:String,required:!1,default:"Page %page% of %total%, current page"},classMap:{type:Object,required:!1,default:function(){return a}},current:{required:!0,type:Number},total:{required:!0,type:Number},slidingEndingSize:{required:!1,type:Number,default:2},slidingWindowSize:{required:!1,type:Number,default:3},nonSlidingSize:{required:!1,type:Number,default:9},pageComponent:{required:!1,type:Object,default:function(){return n}}},components:{SlidingPaginationDefaultPage:n},computed:{isSliding:function(){return this.total>this.nonSlidingSize},hasBeginningGap:function(){return!!this.isSliding&&this.lastBeginningPage+1!==this.firstWindowPage},hasEndingGap:function(){return!!this.isSliding&&this.lastWindowPage+1!==this.firstEndingPage},beginningPages:function(){return s(1,this.isSliding?this.slidingEndingSize:this.total)},lastBeginningPage:function(){return this.beginningPages[this.beginningPages.length-1]},endingPages:function(){return this.isSliding?s(this.total-this.slidingEndingSize+1,this.total):[]},firstEndingPage:function(){return this.endingPages[0]},slidingWindowHalf:function(){var e=this.slidingWindowSize/2;return this.slidingWindowSize%2==1&&(e-=.5),e},slidingWindowPages:function(){if(!this.isSliding)return[];var e=this.lastBeginningPage+this.slidingWindowHalf,t=this.firstEndingPage-this.slidingWindowHalf;if(this.current<=e)return s(this.lastBeginningPage+1,this.lastBeginningPage+this.slidingWindowSize);if(this.current>e&&this.current<t){var i=this.slidingWindowHalf;return this.slidingWindowSize%2==0&&(i/=2),s(-this.slidingWindowHalf+this.current,i+this.current)}return s(this.firstEndingPage-this.slidingWindowSize,this.firstEndingPage-1)},firstWindowPage:function(){return this.slidingWindowPages[0]},lastWindowPage:function(){return this.slidingWindowPages[this.slidingWindowPages.length-1]},showPreviousPageAction:function(){return this.total>this.nonSlidingSize},showNextPageAction:function(){return this.total>this.nonSlidingSize}},methods:{replaceLabelVars:function(e,t){return e.replace("%total%",this.total).replace("%page%",t)},isCurrentPage:function(e){return this.current===e},currentPageLabel:function(e){return this.replaceLabelVars(this.ariaCurrentPageLabel,e)},goToPage:function(e){this.$emit("page-change",e)},goToNextPage:function(){this.goToPage(this.current+1)},goToPreviousPage:function(){this.goToPage(this.current-1)},goToPageLabel:function(e){return this.replaceLabelVars(this.ariaGotoPageLabel,e)},pageLabel:function(e){return this.isCurrentPage(e)?this.currentPageLabel(e):this.goToPageLabel(e)},slotOrDefault:function(e,t){return this.$slots[e]?this.$slots[e]:t},navigationElement:function(e,t,i,n,a){return e("li",{class:[this.classMap.element,this.current===t?this.classMap.elementDisabled:""],key:t},[e("a",{class:this.classMap.page,attrs:{href:"#","aria-label":n,disabled:1===this.current},on:{click:t===this.total?this.goToNextPage:this.goToPreviousPage}},a)])},pageListPage:function(e,t){return e("li",{class:[this.classMap.element,this.isCurrentPage(t)?this.classMap.elementActive:""]},[e(this.pageComponent,{props:{isCurrent:this.isCurrentPage(t),ariaPageLabel:this.pageLabel(t),page:t,pageClass:this.classMap.page},on:{"page-click":this.goToPage}})])},gap:function(e,t){return e("li",{class:[this.classMap.element,this.classMap.elementDisabled],attrs:{"aria-hidden":!0}},[e("a",{class:this.classMap.page,attrs:{href:"#",disabled:!0}},t)])}},render:function(e){var t=this,i=[];return this.showPreviousPageAction&&i.push(this.navigationElement(e,1,-1,this.ariaPreviousPageLabel,this.slotOrDefault("previousPage","«"))),i=i.concat(this.beginningPages.map((function(i){return t.pageListPage(e,i)}))),this.hasBeginningGap&&i.push(this.gap(e,this.slotOrDefault("gapLeft","…"))),i=i.concat(this.slidingWindowPages.map((function(i){return t.pageListPage(e,i)}))),this.hasEndingGap&&i.push(this.gap(e,this.slotOrDefault("gapRight","…"))),i=i.concat(this.endingPages.map((function(i){return t.pageListPage(e,i)}))),this.showNextPageAction&&i.push(this.navigationElement(e,this.total,1,this.ariaNextPageLabel,this.slotOrDefault("nextPage","»"))),e("nav",{class:this.classMap.component,attrs:{"aria-label":this.ariaPaginationLabel}},[e("ul",{class:this.classMap.list},i)])}},void 0,void 0,!1,null,null,null);r.options.__file="src/SlidingPagination.vue";t.default=r.exports}])}));
 
 /***/ }),
 

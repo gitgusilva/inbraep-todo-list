@@ -2,7 +2,9 @@
   <div class="item">
     <div class="info">
       <input type="checkbox" :checked="item.completed" disabled>
-      <span class="description">{{ item.name }}</span>
+      <div class="description">
+        {{ item.name }}
+      </div>
     </div>
     <div class="options">
       <button class="edit" @click="$emit('editTodo', item.id)">
@@ -42,7 +44,6 @@ export default {
 
 .item {
   padding: 10px;
-  max-height: 55px;
   border: 1px solid #c5c2c2;
   border-radius: 0.300rem;
 }
@@ -51,17 +52,20 @@ export default {
   margin-top: 10px;
 }
 
-.item > .info {
+.item > .info, .item > .info > .description {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.item > .info > span {
-  color: #1a1e21;
-  font-size: 1rem;
-  font-weight: 500;
+.item > .info > input {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 }
 
 /* Buttons */
